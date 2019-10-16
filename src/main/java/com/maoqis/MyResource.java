@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("myresource")
+@Path("main")
 public class MyResource {
 
     /**
