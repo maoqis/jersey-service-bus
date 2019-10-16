@@ -14,10 +14,13 @@ import javax.mail.internet.MimeMessage;
 public class SendEmail {
     public static void main(String [] args)
     {
-        sendMailToMe();
+        String title = "This is the Subject Line!";
+        String mgs = "This is actual message";
+        sendMailToMe(title,mgs);
     }
 
-    private static void sendMailToMe() {
+    public static void sendMailToMe(String title,String mgs) {
+        System.out.printf("sendMailToMe "+title);
         // 收件人电子邮箱
         String to = "495714448@qq.com";
 
@@ -55,14 +58,16 @@ public class SendEmail {
                     new InternetAddress(to));
 
             // Set Subject: 头部头字段
-            message.setSubject("This is the Subject Line!");
+
+            message.setSubject(title);
 
             // 设置消息体
-            message.setText("This is actual message");
+
+            message.setText(mgs);
 
             // 发送消息
             Transport.send(message);
-            System.out.println("Sent message successfully....from runoob.com");
+            System.out.println("Sent message successfully....");
         }catch (MessagingException mex) {
             mex.printStackTrace();
         }

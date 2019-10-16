@@ -70,14 +70,14 @@ public class MyResource {
             String s = html.substring(xStart, xEnd);
 //        最近一辆车距离此还有 2 站， 1.32</span> 公里，预计到站时间 3</span> 分钟
 //        车辆均已过站
-            if (!s.contains(",")) {
+            if (!s.contains("分钟")) {
                 return "not cat";
             }
 
-            String[] split = s.split(",");
+            String[] split = s.split("，");
             for (int i = 0; i < split.length; i++) {
                 String param = split[i];
-                String group = Pattern.compile("\\d+").matcher(param).group();
+                String group = getDi(param);
                 if (i == 0) {
                     busSResp.setStation(Integer.valueOf(group));
                 } else if (i == 1) {
@@ -87,7 +87,7 @@ public class MyResource {
                 }
 
             }
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -96,6 +96,16 @@ public class MyResource {
         return ret ;
     }
 
+    public  String getDi(String content) {
+        Pattern p = Pattern.compile("[^\\d]+([\\d]+)[^\\d]+.*");
+        Matcher m = p.matcher(content);
+        boolean result = m.find();
+        String find_result = null;
+        if (result) {
+            find_result = m.group(1);
+        }
+        return find_result;
+    }
 }
 
 
