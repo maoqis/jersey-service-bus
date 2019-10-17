@@ -80,7 +80,8 @@ public class SendEmail {
 
         }catch (MessagingException mex) {
             mex.printStackTrace();
+            return mex.toString();
         }
-        return "fail";
+        return "ok";
     }
 }
