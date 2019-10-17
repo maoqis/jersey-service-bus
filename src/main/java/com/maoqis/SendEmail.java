@@ -10,7 +10,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+@Path("email")
 public class SendEmail {
     public static void main(String [] args)
     {
@@ -19,7 +23,12 @@ public class SendEmail {
         sendMailToMe(title,mgs);
     }
 
-    public static void sendMailToMe(String title,String mgs) {
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getMethod(){
+        return sendMailToMe("test","test");
+    }
+    public static String sendMailToMe(String title,String mgs) {
         System.out.printf("sendMailToMe "+title);
         // 收件人电子邮箱
         String to = "495714448@qq.com";
@@ -68,8 +77,10 @@ public class SendEmail {
             // 发送消息
             Transport.send(message);
             System.out.println("Sent message successfully....");
+
         }catch (MessagingException mex) {
             mex.printStackTrace();
         }
+        return "fail";
     }
 }

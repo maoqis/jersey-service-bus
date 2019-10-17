@@ -1,7 +1,6 @@
 package com.maoqis;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.maoqis.bean.BusSResp;
 
 import java.util.Date;
@@ -35,58 +34,62 @@ public class MyTimer {
 
     public static void timer15m() {
 
-        final Timer timer =new Timer();
+        final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                long l = System.currentTimeMillis();
-                long eight = (8) * uH + 0 * uM;
-                if (l % uD > eight + 8 * uH){
-                    //todo: checkBus
 
-                    if (requestSend()) return;
+                long l = System.currentTimeMillis();
+                CheckTimeAndSendEmail checkTimeAndSendEmail = new CheckTimeAndSendEmail(l).invoke();
+                int isSend = checkTimeAndSendEmail.getIsSend();
+                String msg = checkTimeAndSendEmail.getMsg();
+
+                SendEmail.sendMailToMe(MyTimer.class.getSimpleName(), msg);
+
+                if (isSend > 0) {
                     timer.cancel();
                 }
             }
-        },1,uM);
+        }, 1, uM);
 
 
     }
 
-     static boolean requestSend() {
+    static int requestSend() {
         BusSResp busSResp;
         busSResp = requestBusSResp();
 
         if (busSResp == null) {
-            return true;
+            return -1;
         }
 
-        if (!checkTime(busSResp)) {
-            return true;
+        int checkTime = checkTime(busSResp,System.currentTimeMillis());
+        if (checkTime <= 0) {
+            return checkTime;
         }
 
-        SendEmail.sendMailToMe(busSResp.getMis() +"分钟来446" ,BASE_URI+"myresource");
-        return false;
+        SendEmail.sendMailToMe(busSResp.getMis() + "分钟来446", BASE_URI + "myresource");
+        return 1;
     }
 
-    static boolean checkTime(BusSResp busSResp) {
+    static int checkTime(BusSResp busSResp,long currentTimeMillis) {
         System.out.printf("start checkTime");
-        boolean isSend = false;
-        long m = busSResp.getMis()*uM;
+        long m = busSResp.getMis() * uM;
 
-        if (m ==0) {
-            return isSend;
+        if (m == 0) {
+            return -2;
         }
 
-        long desTime = m+System.currentTimeMillis() + 8*uH;//东8时间
+        long desTime = m + currentTimeMillis + 8 * uH;//东8时间
 
-        if (desTime % uD < 8 * uH + 5 * uM  && desTime % uD > 7 * uH + 55 * uM){//7:55 - 8点5分之前的车
-            if (m> 8 *uM) {//"时间间隔"
-                isSend = true;
+        long dayTime = desTime % uD;
+        System.out.println("dayTime="+dayTime +" "+dayTime/uH+":"+dayTime%uH/uM);
+        if (dayTime < 8 * uH + 5 * uM && dayTime > 7 * uH + 55 * uM) {//7:55 - 8点5分之前的车
+            if (m > 6 * uM) {//"时间间隔"
+                return 1;
             }
         }
-        System.out.printf("end checkTime isSend"+ isSend);
-        return isSend;
+        return -3;
     }
 
     private static BusSResp requestBusSResp() {
@@ -99,8 +102,10 @@ public class MyTimer {
         } catch (Exception e) {
             e.printStackTrace();
             busSResp = null;
-        }finally {
+        } finally {
             return busSResp;
         }
     }
+
+
 }

@@ -46,7 +46,7 @@ public class Main {
             public void run() {
                 MyTimer.timer15m();
             }
-        }, MyTimer.getStartTime().getTime(), MyTimer.uD);
+        }, MyTimer.getStartTime(), MyTimer.uD);
 
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));

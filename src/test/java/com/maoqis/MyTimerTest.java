@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static com.maoqis.MyTimer.uH;
+import static com.maoqis.MyTimer.uM;
 import static org.junit.Assert.assertEquals;
 
 public class MyTimerTest {
@@ -46,14 +48,15 @@ public class MyTimerTest {
 
     }
 
-//    @Test
+    @Test
     public void testCheckTime() {
         BusSResp busSResp = new BusSResp();
-        busSResp.setMis(10);
-        MyTimer.checkTime(busSResp);
+        busSResp.setMis(7);
+        int checkTime = MyTimer.checkTime(busSResp,System.currentTimeMillis()+8*uH+25*uM);
+        System.out.println(checkTime);
     }
 
-    @Test
+//    @Test
     public void sendE() {
         MyTimer.requestSend();
     }
