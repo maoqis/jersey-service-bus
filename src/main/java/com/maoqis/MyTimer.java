@@ -33,7 +33,7 @@ public class MyTimer {
     }
 
     public static void timer15m() {
-
+        SendEmail.sendMailToMe(MyTimer.class.getSimpleName(), "timer15m");
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -44,7 +44,7 @@ public class MyTimer {
                 int isSend = checkTimeAndSendEmail.getIsSend();
                 String msg = checkTimeAndSendEmail.getMsg();
 
-                SendEmail.sendMailToMe(MyTimer.class.getSimpleName(), msg);
+                System.out.println(isSend+":"+msg);
 
                 if (isSend > 0) {
                     timer.cancel();
@@ -56,6 +56,18 @@ public class MyTimer {
     }
 
     static int requestSend() {
+
+
+        boolean inTime = false;
+        long desTime =  System.currentTimeMillis() + 8 * uH;//东8时间
+        long dayTime = desTime % uD;
+        if (dayTime < 8 * uH + 0 * uM && dayTime > 7 * uH + 45 * uM) {//7:55 - 8点5分之前的车
+            inTime = true;
+        }
+
+        if (!inTime) {
+            return -6;
+        }
         BusSResp busSResp;
         busSResp = requestBusSResp();
 
