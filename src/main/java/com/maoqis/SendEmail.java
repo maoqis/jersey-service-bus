@@ -82,7 +82,7 @@ public class SendEmail {
             Log4jUtil.info("Sent message successfully....");
 
         }catch (MessagingException mex) {
-            mex.printStackTrace();
+            Log4jUtil.error("send mail fail",mex);
             return mex.toString();
         }
         return "ok";
