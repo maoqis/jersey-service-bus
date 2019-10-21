@@ -26,7 +26,7 @@ public class MyTimerTest {
     /**
      * Test to see that the message "Got it!" is sent in the response.
      */
-//    @Test
+    @Test
     public void testTimer() {
         //7:40 开始 - 8:00
 
@@ -36,6 +36,7 @@ public class MyTimerTest {
         long l = System.currentTimeMillis();
         System.out.println(l + "");
         Date data = new Date(l);
+
         Date dateTom = new Date(data.getYear(), data.getMonth(), data.getDate() + 1, 0, 0, 0);
         long duration = dateTom.getTime() - l;
         System.out.println("duration=" + duration + " " + duration / (1000 * 60 * 60) + ":" + duration % (1000 * 60 * 60) / (1000 * 60) + ":" +
@@ -48,7 +49,7 @@ public class MyTimerTest {
 
     }
 
-    @Test
+//    @Test
     public void testCheckTime() {
         BusSResp busSResp = new BusSResp();
         busSResp.setMis(7);

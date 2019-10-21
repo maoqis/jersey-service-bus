@@ -1,5 +1,7 @@
 package com.maoqis;
 
+import com.maoqis.utils.Log4jUtil;
+
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -29,7 +31,8 @@ public class SendEmail {
         return sendMailToMe("test","test");
     }
     public static String sendMailToMe(String title,String mgs) {
-        System.out.printf("sendMailToMe "+title);
+
+        Log4jUtil.info("sendMailToMe "+title);
         // 收件人电子邮箱
         String to = "495714448@qq.com";
 
@@ -76,7 +79,7 @@ public class SendEmail {
 
             // 发送消息
             Transport.send(message);
-            System.out.println("Sent message successfully....");
+            Log4jUtil.info("Sent message successfully....");
 
         }catch (MessagingException mex) {
             mex.printStackTrace();

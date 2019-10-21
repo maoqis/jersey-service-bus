@@ -1,5 +1,6 @@
 package com.maoqis;
 
+import com.maoqis.utils.Log4jUtil;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -48,7 +49,7 @@ public class Main {
             }
         }, MyTimer.getStartTime(), MyTimer.uD);
 
-        System.out.println(String.format("Jersey app started with WADL available at "
+        Log4jUtil.info(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
         timer.cancel();

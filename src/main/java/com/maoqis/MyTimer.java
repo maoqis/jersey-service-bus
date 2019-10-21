@@ -2,6 +2,7 @@ package com.maoqis;
 
 import com.google.gson.Gson;
 import com.maoqis.bean.BusSResp;
+import com.maoqis.utils.Log4jUtil;
 
 import java.util.Date;
 import java.util.Timer;
@@ -33,21 +34,22 @@ public class MyTimer {
     }
 
     public static void timer15m() {
-        SendEmail.sendMailToMe(MyTimer.class.getSimpleName(), "timer15m");
+        Log4jUtil.info(MyTimer.class.getSimpleName(), "timer15m ++++++++");
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-
+                Log4jUtil.info("start first timer15m+++");
                 long l = System.currentTimeMillis();
                 CheckTimeAndSendEmail checkTimeAndSendEmail = new CheckTimeAndSendEmail(l).invoke();
                 int isSend = checkTimeAndSendEmail.getIsSend();
                 String msg = checkTimeAndSendEmail.getMsg();
 
-                System.out.println(isSend+":"+msg);
+                Log4jUtil.info("timer15m" + "isSend=" + isSend + ":" + msg);
 
                 if (isSend > 0) {
                     timer.cancel();
+                    Log4jUtil.info(MyTimer.class.getSimpleName(), "timer15m cancel--------");
                 }
             }
         }, 1, uM);
@@ -59,23 +61,26 @@ public class MyTimer {
 
 
         boolean inTime = false;
-        long desTime =  System.currentTimeMillis() + 8 * uH;//东8时间
+        long desTime = System.currentTimeMillis() + 8 * uH;//东8时间
         long dayTime = desTime % uD;
         if (dayTime < 8 * uH + 0 * uM && dayTime > 7 * uH + 45 * uM) {//7:55 - 8点5分之前的车
             inTime = true;
         }
-
+        Log4jUtil.info("CheckTimeAndSendEmail requestSend inTime= " + inTime);
         if (!inTime) {
             return -6;
         }
         BusSResp busSResp;
         busSResp = requestBusSResp();
 
+        Log4jUtil.info("CheckTimeAndSendEmail requestSend BusSResp= " + busSResp);
+
         if (busSResp == null) {
             return -1;
         }
 
-        int checkTime = checkTime(busSResp,System.currentTimeMillis());
+        int checkTime = checkTime(busSResp, System.currentTimeMillis());
+        Log4jUtil.info("CheckTimeAndSendEmail requestSend checkTime= " + checkTime);
         if (checkTime <= 0) {
             return checkTime;
         }
@@ -84,8 +89,9 @@ public class MyTimer {
         return 1;
     }
 
-    static int checkTime(BusSResp busSResp,long currentTimeMillis) {
-        System.out.printf("start checkTime");
+    static int checkTime(BusSResp busSResp, long currentTimeMillis) {
+
+        Log4jUtil.info("start checkTime");
         long m = busSResp.getMis() * uM;
 
         if (m == 0) {
@@ -95,7 +101,9 @@ public class MyTimer {
         long desTime = m + currentTimeMillis + 8 * uH;//东8时间
 
         long dayTime = desTime % uD;
-        System.out.println("dayTime="+dayTime +" "+dayTime/uH+":"+dayTime%uH/uM);
+
+        Log4jUtil.info("dayTime=" + dayTime + " " + dayTime / uH + ":" + dayTime % uH / uM);
+
         if (dayTime < 8 * uH + 5 * uM && dayTime > 7 * uH + 55 * uM) {//7:55 - 8点5分之前的车
             if (m > 6 * uM) {//"时间间隔"
                 return 1;
