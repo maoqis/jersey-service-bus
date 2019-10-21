@@ -42,12 +42,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
         Timer timer = new Timer();
+        long delay = MyTimer.getStartTime().getTime() - System.currentTimeMillis();
+        Log4jUtil.info("main delay="+delay);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 MyTimer.timer15m();
             }
-        }, MyTimer.getStartTime(), MyTimer.uD);
+        }, delay, MyTimer.uD);
 
         Log4jUtil.info(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));

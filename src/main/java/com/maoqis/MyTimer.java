@@ -17,19 +17,14 @@ public class MyTimer {
     public static final long uD = 24 * uH;
 
     public static Date getStartTime() {
-        String zero = "1571155200000";
-
+        Log4jUtil.info("getStartTime");
 
         long l = System.currentTimeMillis();//在过8小时我们已经到0点了
         Date start;
         long seven40 = (7) * uH + 40 * uM;
-        if (l % uD > seven40 + 8 * uH) {
-            start = new Date(l - l % uD + uD + seven40 - 8 * uH);
-        } else {
-            start = new Date(l / uD * uD + seven40 - 8 * uH);
-        }
-        System.out.println(start);
-        System.out.println(new Date(l));
+        start = new Date(l / uD * uD + uD + seven40 - 8 * uH);
+        Log4jUtil.info(start);
+        Log4jUtil.info(new Date(l));
         return start;
     }
 
