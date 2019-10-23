@@ -13,7 +13,10 @@ import static com.maoqis.Main.BASE_URI;
 public class MyTimer {
     public static final long uS = 1000L;
     public static final long uM = uS * 60;
+    public static final long minDuration = 6 * uM;//最小车辆到站时间间隔
     public static final long uH = uM * 60;
+    public static final long END_TIME = 8 * uH + 0 * uM;//结束定时任务时间，车辆最晚时间 +15 分钟
+    public static final long START_TIME = 7 * uH + 45 * uM;//开始每分钟定时任务时间，播报10分钟后的车
     public static final long uD = 24 * uH;
 
     public static Date getStartTime() {
@@ -21,8 +24,7 @@ public class MyTimer {
 
         long l = System.currentTimeMillis();//在过8小时我们已经到0点了
         Date start;
-        long seven40 = (7) * uH + 45 * uM;
-        start = new Date(l / uD * uD + uD + seven40 - 8 * uH);
+        start = new Date(l / uD * uD + uD + START_TIME - 8 * uH);
         Log4jUtil.info(start);
         Log4jUtil.info(new Date(l));
         return start;
@@ -58,7 +60,7 @@ public class MyTimer {
         boolean inTime = false;
         long desTime = System.currentTimeMillis() + 8 * uH;//东8时间
         long dayTime = desTime % uD;
-        if (dayTime < 8 * uH + 0 * uM && dayTime > 7 * uH + 45 * uM) {//7:55 - 8点5分之前的车
+        if (dayTime < END_TIME && dayTime > START_TIME) {//7:55 - 8点5分之前的车
             inTime = true;
         }
         Log4jUtil.info("CheckTimeAndSendEmail requestSend inTime= " + inTime);
@@ -99,8 +101,8 @@ public class MyTimer {
 
         Log4jUtil.info("dayTime=" + dayTime + " " + dayTime / uH + ":" + dayTime % uH / uM);
 
-        if (dayTime < 8 * uH + 15 * uM && dayTime > 7 * uH + 55 * uM) {//7:55 - 8点5分之前的车
-            if (m > 6 * uM) {//"时间间隔"
+        if (dayTime < END_TIME + 15 * uM && dayTime > START_TIME + 10 * uM) {//7:55 - 8点5分之前的车
+            if (m > minDuration) {//"时间间隔"
                 return 1;
             }
         }
