@@ -21,7 +21,7 @@ public class MyTimer {
 
         long l = System.currentTimeMillis();//在过8小时我们已经到0点了
         Date start;
-        long seven40 = (7) * uH + 40 * uM;
+        long seven40 = (7) * uH + 45 * uM;
         start = new Date(l / uD * uD + uD + seven40 - 8 * uH);
         Log4jUtil.info(start);
         Log4jUtil.info(new Date(l));
@@ -99,7 +99,7 @@ public class MyTimer {
 
         Log4jUtil.info("dayTime=" + dayTime + " " + dayTime / uH + ":" + dayTime % uH / uM);
 
-        if (dayTime < 8 * uH + 5 * uM && dayTime > 7 * uH + 55 * uM) {//7:55 - 8点5分之前的车
+        if (dayTime < 8 * uH + 15 * uM && dayTime > 7 * uH + 55 * uM) {//7:55 - 8点5分之前的车
             if (m > 6 * uM) {//"时间间隔"
                 return 1;
             }
