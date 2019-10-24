@@ -22,8 +22,8 @@ public class CheckTimeAndSendEmail {
     }
 
     public CheckTimeAndSendEmail invoke() {
-        long minTime = (7) * uH + 50 * uM;//开始时间
-        long maxTime = (8) * uH + 5 * uM;
+        long minTime = START_TIME;//开始时间
+        long maxTime = END_TIME;
         long bjTime = (l + 8 * uH) % uD;
 
 
