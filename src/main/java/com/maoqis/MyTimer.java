@@ -14,6 +14,8 @@ public class MyTimer {
     public static final long uS = 1000L;
     public static final long uM = uS * 60;
     public static final long uH = uM * 60;
+    public static final long START_BUS_TIME = (8) * uH + 55 * uM;
+    public static final long SEVER_START_TIME = START_BUS_TIME - 15 * uM;
     public static final long uD = 24 * uH;
 
     public static Date getStartTime() {
@@ -21,7 +23,7 @@ public class MyTimer {
 
         long l = System.currentTimeMillis();//在过8小时我们已经到0点了
         Date start;
-        long seven40 = (7) * uH + 40 * uM;
+        long seven40 = SEVER_START_TIME;
         start = new Date(l / uD * uD + uD + seven40 - 8 * uH);
         Log4jUtil.info(start);
         Log4jUtil.info(new Date(l));
@@ -43,8 +45,8 @@ public class MyTimer {
                 Log4jUtil.info("timer15m" + "isSend=" + isSend + ":" + msg);
 
                 if (isSend > 0) {
-                    timer.cancel();
                     Log4jUtil.info(MyTimer.class.getSimpleName(), "timer15m cancel--------");
+                    timer.cancel();
                 }
             }
         }, 1, uM);
@@ -58,7 +60,7 @@ public class MyTimer {
         boolean inTime = false;
         long desTime = System.currentTimeMillis() + 8 * uH;//东8时间
         long dayTime = desTime % uD;
-        if (dayTime < 8 * uH + 0 * uM && dayTime > 7 * uH + 45 * uM) {//7:55 - 8点5分之前的车
+        if (dayTime < SEVER_START_TIME + 20 * uM && dayTime > SEVER_START_TIME + 15 * uM) {//7:55 - 8点5分之前的车
             inTime = true;
         }
         Log4jUtil.info("CheckTimeAndSendEmail requestSend inTime= " + inTime);
@@ -99,7 +101,7 @@ public class MyTimer {
 
         Log4jUtil.info("dayTime=" + dayTime + " " + dayTime / uH + ":" + dayTime % uH / uM);
 
-        if (dayTime < 8 * uH + 5 * uM && dayTime > 7 * uH + 55 * uM) {//7:55 - 8点5分之前的车
+        if (dayTime < SEVER_START_TIME + 25 * uM && dayTime > SEVER_START_TIME + 15 * uM) {//7:55 - 8点5分之前的车
             if (m > 6 * uM) {//"时间间隔"
                 return 1;
             }
